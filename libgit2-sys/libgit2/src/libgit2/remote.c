@@ -1830,7 +1830,7 @@ static int update_one_tip(
 	}
 
 	if (error == GIT_ENOTFOUND) {
-		memset(&old, 0, sizeof(git_oid));
+		memset(&old, 0, GIT_OID_RAWSZ);
 		error = 0;
 
 		if (autotag && (error = git_vector_insert(update_heads, head)) < 0)
@@ -1895,11 +1895,8 @@ static int update_tips_for_spec(
 	if (git_oid__is_hexstr(spec->src)) {
 		git_oid id;
 
-		if ((error = git_oid_fromstr(&id, spec->src)) < 0)
-			goto on_error;
-
-		if (spec->dst &&
-		     (error = update_ref(remote, spec->dst, &id, log_message, callbacks)) < 0)
+		if ((error = git_oid_fromstr(&id, spec->src)) < 0 ||
+		    (error = update_ref(remote, spec->dst, &id, log_message, callbacks)) < 0)
 			goto on_error;
 
 		git_oid_cpy(&oid_head.oid, &id);

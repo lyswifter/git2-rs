@@ -19,7 +19,7 @@
 struct git_tree_entry {
 	uint16_t attr;
 	uint16_t filename_len;
-	git_oid oid;
+	const git_oid *oid;
 	const char *filename;
 };
 

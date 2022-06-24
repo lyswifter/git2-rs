@@ -17,7 +17,6 @@
 #include "map.h"
 #include "mwindow.h"
 #include "odb.h"
-#include "oid.h"
 
 /*
  * A multi-pack-index file.
@@ -41,7 +40,7 @@ typedef struct git_midx_file {
 	uint32_t num_objects;
 
 	/* The OID Lookup table. */
-	unsigned char *oid_lookup;
+	git_oid *oid_lookup;
 
 	/* The Object Offsets table. Each entry has two 4-byte fields with the pack index and the offset. */
 	const unsigned char *object_offsets;

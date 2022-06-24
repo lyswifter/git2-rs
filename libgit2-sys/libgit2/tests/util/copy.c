@@ -4,7 +4,7 @@
 
 void test_copy__file(void)
 {
-	struct stat st = {0};
+	struct stat st;
 	const char *content = "This is some stuff to copy\n";
 
 	cl_git_mkfile("copy_me", content);
@@ -13,9 +13,7 @@ void test_copy__file(void)
 
 	cl_git_pass(git_fs_path_lstat("copy_me_two", &st));
 	cl_assert(S_ISREG(st.st_mode));
-
-	if (!cl_is_env_set("GITTEST_FLAKY_STAT"))
-		cl_assert_equal_sz(strlen(content), (size_t)st.st_size);
+	cl_assert(strlen(content) == (size_t)st.st_size);
 
 	cl_git_pass(p_unlink("copy_me_two"));
 	cl_git_pass(p_unlink("copy_me"));
@@ -23,7 +21,7 @@ void test_copy__file(void)
 
 void test_copy__file_in_dir(void)
 {
-	struct stat st = {0};
+	struct stat st;
 	const char *content = "This is some other stuff to copy\n";
 
 	cl_git_pass(git_futils_mkdir("an_dir/in_a_dir", 0775, GIT_MKDIR_PATH));
@@ -40,9 +38,7 @@ void test_copy__file_in_dir(void)
 
 	cl_git_pass(git_fs_path_lstat("an_dir/second_dir/and_more/copy_me_two", &st));
 	cl_assert(S_ISREG(st.st_mode));
-
-	if (!cl_is_env_set("GITTEST_FLAKY_STAT"))
-		cl_assert_equal_sz(strlen(content), (size_t)st.st_size);
+	cl_assert(strlen(content) == (size_t)st.st_size);
 
 	cl_git_pass(git_futils_rmdir_r("an_dir", NULL, GIT_RMDIR_REMOVE_FILES));
 	cl_assert(!git_fs_path_isdir("an_dir"));
@@ -101,15 +97,11 @@ void test_copy__tree(void)
 	cl_assert(git_fs_path_isfile("t1/c/d/f4"));
 	cl_assert(!git_fs_path_isfile("t1/c/d/.f5"));
 
-	memset(&st, 0, sizeof(struct stat));
 	cl_git_pass(git_fs_path_lstat("t1/c/f3", &st));
 	cl_assert(S_ISREG(st.st_mode));
-
-	if (!cl_is_env_set("GITTEST_FLAKY_STAT"))
-		cl_assert_equal_sz(strlen(content), (size_t)st.st_size);
+	cl_assert(strlen(content) == (size_t)st.st_size);
 
 #ifndef GIT_WIN32
-	memset(&st, 0, sizeof(struct stat));
 	cl_git_pass(git_fs_path_lstat("t1/c/d/l1", &st));
 	cl_assert(S_ISLNK(st.st_mode));
 #endif
@@ -135,7 +127,6 @@ void test_copy__tree(void)
 	cl_assert(git_fs_path_isfile("t2/c/d/.f5"));
 
 #ifndef GIT_WIN32
-	memset(&st, 0, sizeof(struct stat));
 	cl_git_fail(git_fs_path_lstat("t2/c/d/l1", &st));
 #endif
 

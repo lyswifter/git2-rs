@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -x
 
 brew update
 brew install pkgconfig zlib curl openssl libssh2 ninja

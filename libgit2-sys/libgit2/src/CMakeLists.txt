@@ -68,11 +68,6 @@ check_prototype_definition(qsort_r
 
 check_function_exists(qsort_s GIT_QSORT_S)
 
-# random / entropy data
-
-check_function_exists(getentropy GIT_RAND_GETENTROPY)
-check_function_exists(getloadavg GIT_RAND_GETLOADAVG)
-
 # determine architecture of the machine
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -121,8 +116,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Solaris|SunOS)")
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Haiku")
-	list(APPEND LIBGIT2_SYSTEM_LIBS gnu network)
-	list(APPEND LIBGIT2_PC_LIBS "-lgnu -lnetwork")
+	list(APPEND LIBGIT2_SYSTEM_LIBS network)
+	list(APPEND LIBGIT2_PC_LIBS "-lnetwork")
 endif()
 
 if(AMIGA)

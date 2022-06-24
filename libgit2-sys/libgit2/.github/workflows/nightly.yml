@@ -7,7 +7,7 @@ on:
   - cron: '15 1 * * *'
 
 env:
-  docker-registry: ghcr.io
+  docker-registry: docker.pkg.github.com
   docker-config-path: source/ci/docker
 
 jobs:
@@ -247,7 +247,6 @@ jobs:
             CMAKE_OPTIONS: -DUSE_HTTPS=OpenSSL -DDEPRECATE_HARD=ON -DUSE_GSSAPI=ON -DUSE_SSH=ON
             RUN_INVASIVE_TESTS: true
             SKIP_PROXY_TESTS: true
-            GITTEST_FLAKY_STAT: true
           os: ubuntu-latest
         - name: "Linux (arm64, Bionic, GCC, OpenSSL)"
           container:
@@ -272,7 +271,7 @@ jobs:
         path: source
         fetch-depth: 0
     - name: Set up build environment
-      run: source/ci/setup-${{ matrix.platform.setup-script }}-build.sh
+      run: source/ci/setup-${{ matrix.platform.setup-script }}.sh
       shell: bash
       if: matrix.platform.setup-script != ''
     - name: Setup QEMU
@@ -306,7 +305,6 @@ jobs:
               -e CMAKE_GENERATOR \
               -e CMAKE_OPTIONS \
               -e GITTEST_NEGOTIATE_PASSWORD \
-              -e GITTEST_FLAKY_STAT \
               -e PKG_CONFIG_PATH \
               -e SKIP_NEGOTIATE_TESTS \
               -e SKIP_SSH_TESTS \

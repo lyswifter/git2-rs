@@ -740,7 +740,7 @@ static int packed_lookup(
 			return 0;
 		}
 	}
-	return ref_error_notfound(ref_name);
+	return GIT_ENOTFOUND;
 
 parse_failed:
 	git_error_set(GIT_ERROR_REFERENCE, "corrupted packed references file");

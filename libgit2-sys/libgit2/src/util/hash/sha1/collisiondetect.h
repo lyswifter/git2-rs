@@ -5,15 +5,15 @@
  * a Linking Exception. For full terms see the included COPYING file.
  */
 
-#ifndef CLI_cli_h__
-#define CLI_cli_h__
+#ifndef INCLUDE_hash_sha1_collisiondetect_h__
+#define INCLUDE_hash_sha1_collisiondetect_h__
 
-#define PROGRAM_NAME "git2"
+#include "hash/sha1.h"
 
-#include "git2_util.h"
+#include "sha1dc/sha1.h"
 
-#include "error.h"
-#include "opt.h"
-#include "opt_usage.h"
+struct git_hash_sha1_ctx {
+	SHA1_CTX c;
+};
 
-#endif /* CLI_cli_h__ */
+#endif

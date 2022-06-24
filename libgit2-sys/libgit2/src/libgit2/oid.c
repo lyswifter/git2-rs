@@ -187,7 +187,8 @@ int git_oid_fromraw(git_oid *out, const unsigned char *raw)
 
 int git_oid_cpy(git_oid *out, const git_oid *src)
 {
-	return git_oid_raw_cpy(out->id, src->id);
+	memcpy(out->id, src->id, sizeof(out->id));
+	return 0;
 }
 
 int git_oid_cmp(const git_oid *a, const git_oid *b)
@@ -202,7 +203,25 @@ int git_oid_equal(const git_oid *a, const git_oid *b)
 
 int git_oid_ncmp(const git_oid *oid_a, const git_oid *oid_b, size_t len)
 {
-	return git_oid_raw_ncmp(oid_a->id, oid_b->id, len);
+	const unsigned char *a = oid_a->id;
+	const unsigned char *b = oid_b->id;
+
+	if (len > GIT_OID_HEXSZ)
+		len = GIT_OID_HEXSZ;
+
+	while (len > 1) {
+		if (*a != *b)
+			return 1;
+		a++;
+		b++;
+		len -= 2;
+	};
+
+	if (len)
+		if ((*a ^ *b) & 0xf0)
+			return 1;
+
+	return 0;
 }
 
 int git_oid_strcmp(const git_oid *oid_a, const char *str)
